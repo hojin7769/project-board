@@ -287,3 +287,6 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij+all,eclipse,macos,windows,visualstudiocode
+
+### Querydsl
+/src/main/generated
