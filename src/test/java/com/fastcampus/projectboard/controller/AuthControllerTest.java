@@ -8,13 +8,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 @DisplayName("View 컨트롤러 -인증 부분")
-@WebMvcTest
+@WebMvcTest(Void.class)
 @Import(SecurityConfig.class)
 public class AuthControllerTest {
 
@@ -34,6 +35,7 @@ public class AuthControllerTest {
         // When && Then
         mvc.perform(get("/login"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML)); //비슷한 유형이면 통과
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andDo(MockMvcResultHandlers.print());
     }
 }
