@@ -1,6 +1,7 @@
 package com.fastcampus.projectboard.controller;
 
 import com.fastcampus.projectboard.config.SecurityConfig;
+import com.fastcampus.projectboard.domain.type.SearchType;
 import com.fastcampus.projectboard.dto.ArticleWithCommentsDto;
 import com.fastcampus.projectboard.dto.UserAccountDto;
 import com.fastcampus.projectboard.service.ArticleService;
@@ -99,7 +100,9 @@ class ArticleControllerTest {
     public void givenNoting_whenRequestingArticleView_thenReturnArticleView() throws Exception {
         // given
         Long articleId = 1L;
+        long totalCount = 1L;
         given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentsDto());
+        given(articleService.getArticleCount()).willReturn(totalCount);
 
         // When && then
         mvc.perform(get("/articles/" + articleId))
@@ -107,12 +110,15 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML)) //비슷한 유형이면 통과
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attribute("totalCount", totalCount))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
 
         then(articleService).should().getArticle(articleId);
+        then(articleService).should().getArticleCount();
     }
 
-    @Disabled("구현 중")
+        @Disabled("구현 중")
     @DisplayName("[View] [GET] 게시글 검색 전용 페이지- 정상호출")
     @Test
     public void givenNoting_whenRequestingArticleSearchView_thenReturnArticleSearchView() throws Exception {
