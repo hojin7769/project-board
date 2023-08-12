@@ -17,9 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
@@ -28,22 +27,22 @@ import static org.mockito.BDDMockito.*;
 class ArticleCommentServiceTest {
 
     @InjectMocks private ArticleCommentService sut;
-    @Mock ArticleCommentRepository articleCommentRepository;
-    @Mock ArticleRepository articleRepository;
+
+    @Mock private ArticleRepository articleRepository;
+    @Mock private ArticleCommentRepository articleCommentRepository;
 
     @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
     @Test
     void givenArticleId_whenSearchingArticleComments_thenReturnsArticleComments() {
-        //Given
+        // Given
         Long articleId = 1L;
         ArticleComment expected = createArticleComment("content");
         given(articleCommentRepository.findByArticle_Id(articleId)).willReturn(List.of(expected));
 
-        //When
+        // When
         List<ArticleCommentDto> actual = sut.searchArticleComments(articleId);
 
-
-        //Then
+        // Then
         assertThat(actual)
                 .hasSize(1)
                 .first().hasFieldOrPropertyWithValue("content", expected.getContent());
@@ -60,6 +59,7 @@ class ArticleCommentServiceTest {
 
         // When
         sut.saveArticleComment(dto);
+
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
@@ -182,6 +182,5 @@ class ArticleCommentServiceTest {
                 "#java"
         );
     }
-
 
 }

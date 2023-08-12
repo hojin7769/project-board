@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-@Service
 @Slf4j
-@Transactional
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class ArticleCommentService {
 
-    private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
+    private final ArticleCommentRepository articleCommentRepository;
 
     @Transactional(readOnly = true)
     public List<ArticleCommentDto> searchArticleComments(Long articleId) {
@@ -28,6 +28,7 @@ public class ArticleCommentService {
                 .map(ArticleCommentDto::from)
                 .toList();
     }
+
     public void saveArticleComment(ArticleCommentDto dto) {
         try {
             articleCommentRepository.save(dto.toEntity(articleRepository.getReferenceById(dto.articleId())));
@@ -48,4 +49,5 @@ public class ArticleCommentService {
     public void deleteArticleComment(Long articleCommentId) {
         articleCommentRepository.deleteById(articleCommentId);
     }
+
 }

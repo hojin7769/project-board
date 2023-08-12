@@ -14,23 +14,19 @@ import java.util.List;
 
 @RepositoryRestResource
 public interface ArticleCommentRepository extends
-        JpaRepository<ArticleComment,Long>,
+        JpaRepository<ArticleComment, Long>,
         QuerydslPredicateExecutor<ArticleComment>,
-        QuerydslBinderCustomizer<QArticleComment>
-
-{
+        QuerydslBinderCustomizer<QArticleComment> {
 
     List<ArticleComment> findByArticle_Id(Long articleId);
 
     @Override
-    default void customize(QuerydslBindings bindings, QArticleComment root){
+    default void customize(QuerydslBindings bindings, QArticleComment root) {
         bindings.excludeUnlistedProperties(true);
         bindings.including(root.content, root.createdAt, root.createdBy);
-//     bindings.bind(root.title).first(StringExpression::likeIgnoreCase);
         bindings.bind(root.content).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
-
-
     }
+
 }
