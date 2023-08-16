@@ -20,8 +20,8 @@ public class ArticleCommentController {
 
     @PostMapping ("/new")
     public String postNewArticleComment(
-            @AuthenticationPrincipal BoardPrincipal boardPrincipal
-            ,ArticleCommentRequest articleCommentRequest
+            @AuthenticationPrincipal BoardPrincipal boardPrincipal,
+            ArticleCommentRequest articleCommentRequest
     ) {
         articleCommentService.saveArticleComment(articleCommentRequest.toDto(boardPrincipal.toDto()));
 
